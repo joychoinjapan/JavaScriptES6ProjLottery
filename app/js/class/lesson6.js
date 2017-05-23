@@ -1,0 +1,54 @@
+/**
+ * Created by baobaochu on 2017/5/23.
+ */
+{
+    //二进制
+    console.log(0b101);
+    //八进制
+    console.log(0o71);
+}
+
+{
+    //判断是否有尽
+    console.log('15',Number.isFinite(15));
+    console.log('NaN',Number.isFinite(NaN));
+    console.log('1/0',Number.isFinite(NaN));
+    //判断是否不是数字
+    console.log('NaN',Number.isNaN(NaN));
+    console.log('0',Number.isNaN(0));
+}
+{
+    //判断是不是整数
+    console.log('24.7',Number.isInteger(24.7));
+    //24.0也被当作整数
+    console.log('24.0',Number.isInteger(24.0));
+    console.log('str',Number.isInteger('24'));
+}
+{
+    //数的上限和下限
+    console.log(Number.MAX_SAFE_INTEGER);
+    console.log(Number.MIN_SAFE_INTEGER);
+    //判断数是否在有效范围
+    console.log('10',Number.isSafeInteger(10));
+    console.log('a',Number.isSafeInteger('a'));
+
+}
+{
+    //取整
+    console.log(Math.trunc(4.1));
+    console.log(Math.trunc(4.9));
+}
+
+{
+    //判断数是正数负数还是0。如果输入的字符串的数字，则会先转为数字再判断
+    console.log(Math.sign(-5));
+    console.log(Math.sign(0));
+    console.log(Math.sign(5));
+    console.log(Math.sign('50'));
+    console.log(Math.sign('foo'));
+}
+{
+    //立方根的计算.如果输入的是字符串的数字，会先转为Num对象
+    console.log(Math.cbrt(-1));
+    console.log(Math.cbrt(8));
+}
