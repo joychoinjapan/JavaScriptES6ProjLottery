@@ -61,75 +61,93 @@
 
 	'use strict';
 
-	var _templateObject = _taggedTemplateLiteral(['i am ', ', ', ''], ['i am ', ', ', '']),
-	    _templateObject2 = _taggedTemplateLiteral(['Hi\n', ''], ['Hi\\n', '']);
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
-	function _taggedTemplateLiteral(strings, raw) { return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 	/**
-	 * Created by baobaochu on 2017/5/22.
+	 * Created by baobaochu on 2017/5/24.
 	 */
-
-	//字符串扩展使用方法
-
-	//判断字符串中是否包含某些字符
+	//对象扩展：简介表示法 属性表达式 扩展运算符 Object新增方法
 	{
-	    var str = 'string';
-	    console.log('includes', str.includes('r'));
-	}
-	//判断以哪些字符起始
-	{
-	    var _str = 'string';
-	    console.log('start', _str.startsWith('str'));
-	    console.log('end', _str.endsWith('ng'));
-	}
+	    //简介表示法
+	    var o = 1;
+	    var k = 2;
+	    var es5 = {
+	        k: k,
+	        o: o
+	    };
+	    var es6 = {
+	        o: o, k: k
+	    };
+	    console.log(es5, es6);
 
-	//重复
-	{
-	    var _str2 = "abc";
-	    console.log(_str2.repeat(2));
-	}
-
-	//模版字符串（非常重要）
-	{
-	    //新建两个数据项
-	    var name = "list";
-	    var info = "hello world";
-	    //模版。把数据项放到${}中。
-	    var m = 'i am ' + name + ',' + info;
-	    console.log(m);
-	}
-	//es7草案
-
-	{
-	    //前补白。如果需要输出两个长度的字符串，则在字符串前方加上0
-	    console.log('1'.padStart(2, '0'));
-	    //后补白。如果需要输出两个长度的字符串，则在字符串后方加上0
-	    console.log('1'.padEnd(2, '0'));
-
-	    console.log('1'.padStart(3, '0'));
-	    console.log('1'.padEnd(3, '02'));
-	}
-
-	//标签模版（比较难）
-	{
-	    //加了abc之后
-	    var abc = function abc(s1, s2, s3) {
-	        console.log(s1, s2, s3);
-	        return s1 + s2 + s3;
+	    var es5_method = {
+	        hello: function hello() {
+	            console.log('hello');
+	        }
 	    };
 
-	    var user = {
-	        name: 'list',
-	        info: 'hello world'
+	    var es6_method = {
+	        hello: function hello() {
+	            console.log('hello');
+	        }
 	    };
-	    console.log(abc(_templateObject, user.name, user.info));
+
+	    console.log(es5_method.hello(), es6_method.hello());
 	}
-	//raw可以忽略转义字符。实现不换行。斜杠不生效。相当于在斜杠前面加斜杠。
+
+	//属性表示法,实现变量依赖
+
 	{
-	    console.log(String.raw(_templateObject2, 1 + 2));
-	    console.log('Hi\n' + (1 + 2));
+	    var a = 'b';
+	    var es5_obj = {
+	        a: 'c'
+	    };
+	    var es6_obj = _defineProperty({}, a, 'c');
+
+	    console.log(es5_obj, es6_obj);
 	}
+
+	//新增API
+	{
+	    console.log('字符串', Object.is('abc', 'abc'), 'abc' === 'abc');
+	    console.log('数组', Object.is([], []));
+	    //合并一个对象。浅复制。
+	    console.log('拷贝', Object.assign({ a: 'a' }, { b: 'b' }));
+	    //entries
+	    var test = {
+	        k: 123, o: 456
+	    };
+	    var _iteratorNormalCompletion = true;
+	    var _didIteratorError = false;
+	    var _iteratorError = undefined;
+
+	    try {
+	        for (var _iterator = Object.entries(test)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	            var _step$value = _slicedToArray(_step.value, 2),
+	                key = _step$value[0],
+	                value = _step$value[1];
+
+	            console.log([key, value]);
+	        }
+	    } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	    } finally {
+	        try {
+	            if (!_iteratorNormalCompletion && _iterator.return) {
+	                _iterator.return();
+	            }
+	        } finally {
+	            if (_didIteratorError) {
+	                throw _iteratorError;
+	            }
+	        }
+	    }
+	}
+
+	//扩展运算符,babel支持不好
 
 /***/ })
 /******/ ]);
