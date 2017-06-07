@@ -61,6 +61,8 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	var syy = new _lottery2.default();
+
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -8707,289 +8709,210 @@
 
 	'use strict';
 
-	__webpack_require__(300);
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
 
-	__webpack_require__(301);
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	__webpack_require__(302);
+	__webpack_require__(2);
 
-	__webpack_require__(303);
+	var _base = __webpack_require__(300);
+
+	var _base2 = _interopRequireDefault(_base);
+
+	var _timer = __webpack_require__(302);
+
+	var _timer2 = _interopRequireDefault(_timer);
+
+	var _calculate = __webpack_require__(303);
+
+	var _calculate2 = _interopRequireDefault(_calculate);
+
+	var _interface = __webpack_require__(304);
+
+	var _interface2 = _interopRequireDefault(_interface);
+
+	var _jquery = __webpack_require__(301);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var copyProperties = function copyProperties(target, source) {
+	  var _iteratorNormalCompletion = true;
+	  var _didIteratorError = false;
+	  var _iteratorError = undefined;
+
+	  try {
+	    for (var _iterator = Reflect.ownKeys(source)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	      var key = _step.value;
+
+	      if (key !== 'constructor' && key !== 'prototype' && key !== 'name') {
+	        var desc = Object.getOwnPropertyDescriptor(source, key);
+	        Object.defineProperty(target, key, desc);
+	      }
+	    }
+	  } catch (err) {
+	    _didIteratorError = true;
+	    _iteratorError = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion && _iterator.return) {
+	        _iterator.return();
+	      }
+	    } finally {
+	      if (_didIteratorError) {
+	        throw _iteratorError;
+	      }
+	    }
+	  }
+	};
+
+	var mix = function mix() {
+	  var Mix = function Mix() {
+	    _classCallCheck(this, Mix);
+	  };
+
+	  for (var _len = arguments.length, mixins = Array(_len), _key = 0; _key < _len; _key++) {
+	    mixins[_key] = arguments[_key];
+	  }
+
+	  var _iteratorNormalCompletion2 = true;
+	  var _didIteratorError2 = false;
+	  var _iteratorError2 = undefined;
+
+	  try {
+	    for (var _iterator2 = mixins[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	      var mixin = _step2.value;
+
+	      copyProperties(Mix, mixin);
+	      copyProperties(Mix.prototype, mixin.prototype);
+	    }
+	  } catch (err) {
+	    _didIteratorError2 = true;
+	    _iteratorError2 = err;
+	  } finally {
+	    try {
+	      if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	        _iterator2.return();
+	      }
+	    } finally {
+	      if (_didIteratorError2) {
+	        throw _iteratorError2;
+	      }
+	    }
+	  }
+
+	  return Mix;
+	};
+
+	var Lottery = function (_mix) {
+	  _inherits(Lottery, _mix);
+
+	  function Lottery() {
+	    var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'syy';
+	    var cname = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '11选5';
+	    var issue = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '**';
+	    var state = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : '**';
+
+	    _classCallCheck(this, Lottery);
+
+	    var _this = _possibleConstructorReturn(this, (Lottery.__proto__ || Object.getPrototypeOf(Lottery)).call(this));
+
+	    _this.name = name;
+	    _this.cname = cname;
+	    _this.issue = issue;
+	    _this.state = state;
+	    _this.el = '';
+	    _this.omit = new Map();
+	    _this.open_code = new Set();
+	    _this.open_code_list = new Set();
+	    _this.play_list = new Map();
+	    _this.number = new Set();
+	    _this.issue_el = '#curr_issue';
+	    _this.countdown_el = '#countdown';
+	    _this.state_el = '.state_el';
+	    _this.cart_el = '.codelist';
+	    _this.omit_el = '';
+	    _this.cur_play = 'r5';
+	    _this.initPlayList();
+	    _this.initNumber();
+	    _this.updateState();
+	    _this.initEvent();
+	    return _this;
+	  }
+
+	  /**
+	   * [updateState 状态更新]
+	   * @return {[type]} [description]
+	   */
+
+
+	  _createClass(Lottery, [{
+	    key: 'updateState',
+	    value: function updateState() {
+	      var self = this;
+	      this.getState().then(function (res) {
+	        self.issue = res.issue;
+	        self.end_time = res.end_time;
+	        self.state = res.state;
+	        (0, _jquery2.default)(self.issue_el).text(res.issue);
+	        self.countdown(res.end_time, function (time) {
+	          (0, _jquery2.default)(self.countdown_el).html(time);
+	        }, function () {
+	          setTimeout(function () {
+	            self.updateState();
+	            self.getOmit(self.issue).then(function (res) {});
+	            self.getOpenCode(self.issue).then(function (res) {});
+	          }, 500);
+	        });
+	      });
+	    }
+
+	    /**
+	     * [initEvent 初始化事件]
+	     * @return {[type]} [description]
+	     */
+
+	  }, {
+	    key: 'initEvent',
+	    value: function initEvent() {
+	      var self = this;
+	      (0, _jquery2.default)('#plays').on('click', 'li', self.changePlayNav.bind(self));
+	      (0, _jquery2.default)('.boll-list').on('click', '.btn-boll', self.toggleCodeActive.bind(self));
+	      (0, _jquery2.default)('#confirm_sel_code').on('click', self.addCode.bind(self));
+	      (0, _jquery2.default)('.dxjo').on('click', 'li', self.assistHandle.bind(self));
+	      (0, _jquery2.default)('.qkmethod').on('click', '.btn-middle', self.getRandomCode.bind(self));
+	    }
+	  }]);
+
+	  return Lottery;
+	}(mix(_base2.default, _calculate2.default, _interface2.default, _timer2.default));
+
+	exports.default = Lottery;
 
 /***/ }),
 /* 300 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * Created by baobaochu on 2017/6/4.
-	 */
-	/**
-	 *倒计时模块
-	 */
-
-	//倒计时从服务器端获取
-	//遗漏 多少期没有出这个号码了
-	var Timer = function () {
-	    function Timer() {
-	        _classCallCheck(this, Timer);
-	    }
-
-	    _createClass(Timer, [{
-	        key: 'countdown',
-
-	        //定时器的方法:
-	        /**
-	         * @param end 截止时间
-	         * @param update 时间更新回调
-	         * @handle handle 倒计时结束时用于回调
-	         */
-	        value: function countdown(end, update, handle) {
-	            //获取当前时间
-	            var now = new Date().getTime();
-	            //获取当前对象的指针
-	            var self = this;
-	            //如果当前时间大于截止时间，说明倒计时已经结束。用handle.call来执行倒计时结束的回调
-	            if (now - end) {
-	                handle.call(self);
-	            } else {
-	                //如果当前时间没有结束，首先要判断当前时间离截止时间的剩余时间
-	                var last_time = end - now;
-	                //设置常量：1000*60*60*24 毫秒转换 一天多少毫秒
-	                var px_d = 1000 * 60 * 60 * 24;
-	                //一小时多少毫秒
-	                var px_h = 1000 * 60 * 60;
-	                //一分钟多少毫秒
-	                var px_m = 1000 * 60;
-
-	                var px_s = 1000;
-	                //剩余时间还剩多少天
-	                var d = Math.floor(last_time / px_d);
-	                //剩余时间还剩多少小时；
-	                var h = Math.floor((last_time - d * px_d) / px_h);
-	                //剩余时间还剩多少分
-	                var m = Math.floor((last_time - d * px_d - h * px_h) / px_m);
-	                //剩余时间还剩多少秒
-	                var s = Math.floor((last_time - d * px_d - h * px_h - m * px_m) / px_s);
-
-	                var r = [];
-	                if (d > 0) {
-	                    r.push('<em>' + d + '</em>\u5929');
-	                }
-	                //除了判断小时是否大于0，还得判断数组中有没有天这种情况
-	                if (r.length || h > 0) {
-	                    r.push('<em>' + h + '</em>\u65F6');
-	                }
-	                if (r.length || m > 0) {
-	                    r.push('<em>' + m + '</em>\u5206');
-	                }
-	                if (r.length || s > 0) {
-	                    r.push('<em>' + s + '</em>\u79D2');
-	                }
-	                //把数组中的元素全部连接起来存入last_time里面
-	                self.last_time = r.join('');
-	                //一秒钟轮询一次,更新
-	                update.call(self, r.join(''));
-	                //重新倒计时
-	                setTimeout(function () {
-	                    self.countdown(end, update, handle);
-	                }, 1000);
-	            }
-	        }
-	    }]);
-
-	    return Timer;
-	}();
-
-	exports.default = Timer;
-
-/***/ }),
-/* 301 */
-/***/ (function(module, exports) {
-
-	/**
-	 * Created by baobaochu on 2017/6/4.
-	 */
-	/**
-	 * 彩票本身的模块
-	 */
-	"use strict";
-
-/***/ }),
-/* 302 */
-/***/ (function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	    value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	/**
-	 * Created by baobaochu on 2017/6/4.
-	 */
-	/**
-	 *计算模块
-	 */
-	var Calculate = function () {
-	    function Calculate() {
-	        _classCallCheck(this, Calculate);
-	    }
-
-	    _createClass(Calculate, [{
-	        key: 'computeCount',
-
-	        /**
-	         *[computeCount 计算注数]
-	         * @param {number} active [当前选中的号码]
-	         * @param {string} play_name [当前的玩法]
-	         * @return {number}          [注数]
-	         */
-
-	        value: function computeCount(active, play_name) {
-	            var count = 0;
-	            //通过传进去的玩法列表判断是否含有该玩法。判断map play_list中是否有该play_name
-	            var exist = this.play_list.has(play_name);
-	            //组合运算 active 是长度
-	            var arr = new Array(active).fill('0');
-	            if (exist && play_name.at(0) === 'r') {
-	                count = Calculate.combine(arr, play_name.split('')[1]).length;
-	            }
-	            return count;
-	        }
-
-	        /**
-	         *[computeBonus 奖金范围预测]
-	         * @param {number} active[当前选中的号码总数]
-	         * @param {string} play_name    [当前的玩法标识]
-	         * @return {array}              [奖金范围]
-	         */
-
-	    }, {
-	        key: 'computeBonus',
-	        value: function computeBonus(active, play_name) {
-	            //把字符串拆分成数组;
-	            var play = play_name.split('');
-	            var self = this;
-	            //将指定大小的数组里面填充0；
-	            var arr = new Array(play[1] * 1).fill(0);
-	            var min = void 0,
-	                max = void 0;
-	            if (play[0] === 'r') {
-	                //最小命中数
-	                var min_active = 5 - (11 - active);
-	                if (min_active > 0) {
-	                    if (min_active - play[1] >= 0) {
-	                        arr = new Array(min_active).fill(0);
-	                        min = Calculate.combine(arr, play[1]).length;
-	                    } else {
-	                        if (play[1] - 5 > 0 && active - play[1] >= 0) {
-	                            arr = new Array(active - 5).fill(0);
-	                            min = Calculate.combine(arr, play[1] - 5).length;
-	                        } else {
-	                            min = active - play[1] > -1 ? 1 : 0;
-	                        }
-	                    }
-	                } else {
-	                    min = active - play[1] > -1 ? 1 : 0;
-	                }
-
-	                var max_active = Math.min(active, 5);
-	                if (play[1] - 5 > 0) {
-	                    if (active - play[1] >= 0) {
-	                        arr = new Array(active - 5).fill(0);
-	                        max = Calculate.combine(arr, play[1] - 5).length;
-	                    } else {
-	                        max = 0;
-	                    }
-	                } else if (play[1] - 5 < 0) {
-	                    arr = new Array(Math.min(active, 5)).fill(0);
-	                    max = Calculate.combine(arr, play[1]).length;
-	                } else {
-	                    max = 1;
-	                }
-	            }
-	            //返回金额;
-	            return [min, max].map(function (item) {
-	                return item * self.play_list.get(play_name).bonus;
-	            });
-	        }
-
-	        //静态方法
-	        /**
-	         * [combine 组合运算]
-	         * @param {array} arr [参与组合运算的数组]
-	         * @param {number} size [组合运算的基数]
-	         * @return {number}    [计算注数]
-	         */
-
-	    }], [{
-	        key: 'combine',
-	        value: function combine(arr, size) {
-	            var allResult = [];
-	            //递归必须起一个匿名函数
-	            (function f(arr, size, result) {
-	                var arrLen = arr.length;
-	                if (size > arrLen) {
-	                    return;
-	                }
-	                if (size === arrLen) {
-	                    allResult.push([].concat(result, arr));
-	                } else {
-	                    for (var i = 0; i < arrLen; i++) {
-	                        var newResult = [].concat(result);
-	                        newResult.push(arr[i]);
-	                        if (size === 1) {
-	                            allResult.push(newResult);
-	                        } else {
-	                            var newArr = [].concat(arr);
-	                            newArr.splice(0, i + 1);
-	                            f(newArr, size - 1, newResult);
-	                        }
-	                    }
-	                }
-	            })(arr, size, []);
-
-	            return allResult;
-	        }
-	    }]);
-
-	    return Calculate;
-	}();
-
-	exports.default = Calculate;
-
-/***/ }),
-/* 303 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	    value: true
+	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }(); /**
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      * Created by baobaochu on 2017/6/4.
-	                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      */
-	/**
-	 * 接口模块
-	 */
+	var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-	var _jquery = __webpack_require__(304);
+	var _jquery = __webpack_require__(301);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -8997,105 +8920,450 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-	var Interface = function () {
-	    function Interface() {
-	        _classCallCheck(this, Interface);
+	/**
+	 * 未定义的数据结构：
+	 * play_list map 玩法
+	 * number set 号码
+	 * omit map 遗漏数据
+	 * openCode set 奖号
+	 *
+	 */
+	var Base = function () {
+	  function Base() {
+	    _classCallCheck(this, Base);
+	  }
+
+	  _createClass(Base, [{
+	    key: 'initPlayList',
+
+	    /**
+	     * [initPlayList 初始化奖金和玩法及说明]
+	     * @return {[type]} [description]
+	     */
+	    //保存玩法以及提示。设置奖金，提示和名称
+	    //采用map的数据结构。可以级联操作
+	    value: function initPlayList() {
+	      this.play_list.set('r2', {
+	        bonus: 6,
+	        tip: '从01～11中任选2个或多个号码，所选号码与开奖号码任意两个号码相同，即中奖<em class="red">6</em>元',
+	        name: '任二'
+	      }).set('r3', {
+	        bonus: 19,
+	        tip: '从01～11中任选3个或多个号码，选号与奖号任意三个号相同，即中奖<em class="red">19</em>元',
+	        name: '任三'
+	      }).set('r4', {
+	        bonus: 78,
+	        tip: '从01～11中任选4个或多个号码，所选号码与开奖号码任意四个号码相同，即中奖<em class="red">78</em>元',
+	        name: '任四'
+	      }).set('r5', {
+	        bonus: 540,
+	        tip: '从01～11中任选5个或多个号码，所选号码与开奖号码相同，即中奖<em class="red">540</em>元',
+	        name: '任五'
+	      }).set('r6', {
+	        bonus: 90,
+	        tip: '从01～11中任选6个或多个号码，所选号码与开奖号码五个号码相同，即中奖<em class="red">90</em>元',
+	        name: '任六'
+	      }).set('r7', {
+	        bonus: 26,
+	        tip: '从01～11中任选7个或多个号码，选号与奖号五个号相同，即中奖<em class="red">26</em>元',
+	        name: '任七'
+	      }).set('r8', {
+	        bonus: 9,
+	        tip: '从01～11中任选8个或多个号码，选号与奖号五个号相同，即中奖<em class="red">9</em>元',
+	        name: '任八'
+	      });
+	    }
+	    /**
+	     * [initNumber 初始化号码]
+	     * @return {[type]} [description]
+	     */
+
+	    //1的时候个位数要补充一个0
+	    //number是个set对象，是因为投注号码不可能重复，set不允许元素重复，所以使用set
+
+	  }, {
+	    key: 'initNumber',
+	    value: function initNumber() {
+	      for (var i = 1; i < 12; i++) {
+	        //padStart让字符串保持两位长度，如果长度不够，添加0／补白
+	        this.number.add(('' + i).padStart(2, '0'));
+	      }
 	    }
 
-	    _createClass(Interface, [{
-	        key: 'getOmit',
+	    /**
+	     * [setOmit 设置遗漏数据]
+	     * @param {[map]} omit [description]
+	     */
 
-	        /**
-	         * [getOmit 获取遗漏数据]
-	         * @param {string} issue [当前的期号]
-	         */
-	        value: function getOmit(issue) {
-	            var self = this;
-	            //promise方便异步操作。
-	            return new Promise(function (resolve, reject) {
-	                _jquery2.default.ajax({
-	                    url: '/get/omit',
-	                    data: {
-	                        //前端后端的约定格式
-	                        issue: issue
-	                    },
-	                    dataType: 'json',
-	                    success: function success(res) {
-	                        //把服务器取到的数据保存到当前的对象
-	                        self.setOmit(res.data);
-	                        //把数据取到前端
-	                        resolve.call(self, res);
-	                    },
-	                    error: function error(err) {
-	                        reject.call(err);
-	                    }
+	  }, {
+	    key: 'setOmit',
+	    value: function setOmit(omit) {
+	      //保存对当前对象的引用
+	      var self = this;
+	      //把当前omit对象的的数据清空
+	      //omit是一个map对象
+	      self.omit.clear();
+	      //遍历map对象omit
+	      var _iteratorNormalCompletion = true;
+	      var _didIteratorError = false;
+	      var _iteratorError = undefined;
 
-	                });
-	            });
-	        }
-	        /**
-	         * [getOpenCode 获取开奖号码]
-	         * @param {string} issue[期号]
-	         *
-	         */
+	      try {
+	        for (var _iterator = omit.entries()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+	          var _step$value = _slicedToArray(_step.value, 2),
+	              index = _step$value[0],
+	              item = _step$value[1];
 
-	    }, {
-	        key: 'getOpenCode',
-	        value: function getOpenCode(issue) {
-	            var self = this;
-	            return new Promise(function (resolve, reject) {
-	                _jquery2.default.ajax({
-	                    url: '/get/opencode',
-	                    data: {
-	                        issue: issue
-	                    },
-	                    dataType: 'json',
-	                    success: function success(res) {
-	                        self.setOpenCode(res.data);
-	                        resolve.call(self, res);
-	                    },
-	                    error: function error(err) {
-	                        reject.call(err);
-	                    }
-	                });
-	            });
+	          //从参数中传进来的新的遗漏数据保存。index指的是数字号码，item指的是还剩多少个遗漏。
+	          self.omit.set(index, item);
 	        }
 
-	        /**
-	         * [getState 获取当前状态]
-	         * @param {string} issue[期号]
-	         *
-	         */
-
-	    }, {
-	        key: 'getState',
-	        value: function getState(issue) {
-	            var self = this;
-	            return new Promise(function (resolve, reject) {
-	                _jquery2.default.ajax({
-	                    url: '/get/state',
-	                    data: {
-	                        issue: issue
-	                    },
-	                    dataType: 'json',
-	                    success: function success(res) {
-	                        resolve.call(self, res);
-	                    },
-	                    error: function error(err) {
-	                        reject.call(err);
-	                    }
-	                });
-	            });
+	        //omit_el是一个选择器。将遗漏数据的每个数值item设置为新的数值（从omitmap中拿到的数值）
+	      } catch (err) {
+	        _didIteratorError = true;
+	        _iteratorError = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion && _iterator.return) {
+	            _iterator.return();
+	          }
+	        } finally {
+	          if (_didIteratorError) {
+	            throw _iteratorError;
+	          }
 	        }
-	    }]);
+	      }
 
-	    return Interface;
+	      (0, _jquery2.default)(self.omit_el).each(function (index, item) {
+	        (0, _jquery2.default)(item).text(self.omit.get(index));
+	      });
+	    }
+
+	    /**
+	     * [setOpenCode 设置开奖]
+	     * @param {[type]} code [description]
+	     */
+	    //opencode是一个set。code是新传来的奖号参数set，将新传进来的code set的每个值加入opencode开奖set对象中
+
+	  }, {
+	    key: 'setOpenCode',
+	    value: function setOpenCode(code) {
+	      var self = this;
+	      //从当前对象中拿到open_code map，将codemap的内容全部清除
+	      self.open_code.clear();
+	      var _iteratorNormalCompletion2 = true;
+	      var _didIteratorError2 = false;
+	      var _iteratorError2 = undefined;
+
+	      try {
+	        for (var _iterator2 = code.values()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+	          var item = _step2.value;
+
+	          self.open_code.add(item);
+	        }
+	        //调用更新奖号的接口
+	      } catch (err) {
+	        _didIteratorError2 = true;
+	        _iteratorError2 = err;
+	      } finally {
+	        try {
+	          if (!_iteratorNormalCompletion2 && _iterator2.return) {
+	            _iterator2.return();
+	          }
+	        } finally {
+	          if (_didIteratorError2) {
+	            throw _iteratorError2;
+	          }
+	        }
+	      }
+
+	      self.updateOpenCode && self.updateOpenCode.call(self, code);
+	    }
+
+	    /**
+	     * [toggleCodeActive 号码选中取消]
+	     * @param  {[type]} e [description]
+	     * @return {[type]}   [description]
+	     */
+	    //
+
+	  }, {
+	    key: 'toggleCodeActive',
+	    value: function toggleCodeActive(e) {
+	      var self = this;
+	      //借助jquery获取当前选中的对象dom
+	      var $cur = (0, _jquery2.default)(e.currentTarget);
+	      //将该对象切换为选中状态激活。
+	      $cur.toggleClass('btn-boll-active');
+	      //计算选中的金额。选中之后自动计算金额。
+	      self.getCount();
+	    }
+
+	    /**
+	     * [changePlayNav 切换玩法的交互]
+	     * @param  {[type]} e [description]
+	     * @return {[type]}   [description]
+	     */
+
+	  }, {
+	    key: 'changePlayNav',
+	    value: function changePlayNav(e) {
+	      var self = this;
+	      //获取当前对象。currenttarget指的是子元素，事件绑定的是父元素。
+	      var $cur = (0, _jquery2.default)(e.currentTarget);
+	      //添加激活类名，去除所有其他兄弟元素节点的激活状态（active）
+	      $cur.addClass('active').siblings().removeClass('active');
+	      //将desc属性中的描述R2之类的转换为小写
+	      self.cur_play = $cur.attr('desc').toLocaleLowerCase();
+	      //通过playlist map拿到提示说明tip，然后切换dom中的说明文字
+	      //比如从01～11中任选5个或多个号码，所选号码与开奖号码相同，即中奖540元
+	      (0, _jquery2.default)('#zx_sm span').html(self.play_list.get(self.cur_play).tip);
+	      //切换玩法的时候会把上一次选中的号码全部清空。
+	      (0, _jquery2.default)('.boll-list .btn-boll').removeClass('btn-boll-active');
+	      self.getCount();
+	    }
+
+	    /**
+	     * [assistHandle 操作区 全 大 小 奇 偶 清除]
+	     * @param  {[type]} e [description]
+	     * @return {[type]}   [description]
+	     */
+
+	  }, {
+	    key: 'assistHandle',
+	    value: function assistHandle(e) {
+	      //阻止默认事件
+	      e.preventDefault();
+	      var self = this;
+	      //获取当前dom对象
+	      var $cur = (0, _jquery2.default)(e.currentTarget);
+	      //返回了当前选中的数据[全 大 小 奇偶 等]list中的index
+	      var index = $cur.index();
+	      //做操作前，要清空之前的所有选中的东西
+	      (0, _jquery2.default)('.boll-list .btn-boll').removeClass('btn-boll-active');
+
+	      //1.全选，将所有号码选中。
+	      if (index === 0) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').addClass('btn-boll-active');
+	      }
+
+	      // 大 要求选中所有的大于五的数字，如果遍历到大于五的数字，则全部变为选中。
+	      if (index === 1) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').each(function (i, t) {
+	          if (t.textContent - 5 > 0) {
+	            (0, _jquery2.default)(t).addClass('btn-boll-active');
+	          }
+	        });
+	      }
+
+	      //小 要求选中所有小于六的数字。如果遍历到小于六的数字，则全部变为选中。
+	      if (index === 2) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').each(function (i, t) {
+	          if (t.textContent - 6 < 0) {
+	            (0, _jquery2.default)(t).addClass('btn-boll-active');
+	          }
+	        });
+	      }
+
+	      //奇 要求选中所有奇数的数字。如果遍历到奇数的数字，则全部变为选中。
+	      if (index === 3) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').each(function (i, t) {
+	          if (t.textContent % 2 == 1) {
+	            (0, _jquery2.default)(t).addClass('btn-boll-active');
+	          }
+	        });
+	      }
+	      //偶 要求选中所有级偶数的数字。如果遍历到奇数的数字，则全部变为选中。
+	      if (index === 4) {
+	        (0, _jquery2.default)('.boll-list .btn-boll').each(function (i, t) {
+	          if (t.textContent % 2 == 0) {
+	            (0, _jquery2.default)(t).addClass('btn-boll-active');
+	          }
+	        });
+	      }
+	      self.getCount();
+	    }
+
+	    /**
+	     * [getName 获取当前彩票名称]
+	     * @return {[type]} [description]
+	     */
+
+	  }, {
+	    key: 'getName',
+	    value: function getName() {
+	      //这个name就是当前彩票的玩法名称
+	      return this.name;
+	    }
+
+	    /**
+	     * [addCode 添加号码]
+	     */
+	    //点击确认选号按钮之后，点击完毕放入购物车
+
+	  }, {
+	    key: 'addCode',
+	    value: function addCode() {
+	      var self = this;
+	      //获取选中的号码的文本值拿出来 是一个02030405之类拼接的字符串，然后将它分割为两位一格的数组
+	      var $active = (0, _jquery2.default)('.boll-list .btn-boll-active').text().match(/\d{2}/g);
+	      //如果active存在，则取得数组的长度
+	      var active = $active ? $active.length : 0;
+	      //计算注数
+	      var count = self.computeCount(active, self.cur_play);
+	      //如果注数字大于0，则添加单次号码文本模版，文本模版见下方
+	      //任五复式 02 07 08 09 10 11 [6注,12元]
+	      //02 07 08 09 10 11 就是 $active.join(' ') 用空格将数组链连接为一个字符串格式
+	      //任五 就是玩法名 self.play_list.get(self.cur_play)拿出的字符串
+	      //count 就是注数
+	      if (count) {
+	        self.addCodeItem($active.join(' '), self.cur_play, self.play_list.get(self.cur_play).name, count);
+	      }
+	    }
+
+	    /**
+	     * [addCodeItem 添加单次号码]
+	     * @param {[string]} code     [ 02 07 08 09 10 11]
+	     * @param {[string]} type     [r1等]
+	     * @param {[type]} typeName [任五等]
+	     * @param {[number]} count    [注数]
+	     */
+
+	  }, {
+	    key: 'addCodeItem',
+	    value: function addCodeItem(code, type, typeName, count) {
+	      var self = this;
+	      //字符串模版
+	      //注数大于1的是复式
+	      var tpl = '\n    <li codes="' + type + '|' + code + '" bonus="' + count * 2 + '" count="' + count + '">\n\t\t <div class="code">\n\t\t     <b>' + typeName + (count > 1 ? '复式' : '单式') + '</b>\n\t\t\t <b class="em">' + code + '</b>\n\t\t\t [' + count + '\u6CE8,<em class="code-list-money">' + count * 2 + '</em>\u5143]\n\t\t </div>\n\t </li>\n    ';
+	      //把文字添加到cart_el的dom对象中去
+	      (0, _jquery2.default)(self.cart_el).append(tpl);
+
+	      //追加玩法或者号码后的投注金额
+	      self.getTotal();
+	    }
+
+	    /**
+	     * 描述如下：
+	     * 您选了 1 注，共 2 元 若中奖，奖金： 540 元， 您将盈利 538 元
+	     * 您选了 6 注，共 12 元 若中奖，奖金： 6 至 36 元， 您将盈利 -6 至 24 元
+	     */
+
+	  }, {
+	    key: 'getCount',
+	    value: function getCount() {
+	      var self = this;
+	      //获取当前选中的号码组成的数组的长度。
+	      var active = (0, _jquery2.default)('.boll-list .btn-boll-active').length;
+	      //计算组合的注数
+	      var count = self.computeCount(active, self.cur_play);
+	      //获取奖金的范围。为一个数组 rang[0]为最小盈利的额度,rang[1]为最大的盈利的额度。
+	      var range = self.computeBonus(active, self.cur_play);
+	      //要花的钱
+	      var money = count * 2;
+
+	      //盈利 win1为最小盈利的额度-花的钱 win1为最大盈利的额度-花的钱
+	      var win1 = range[0] - money;
+	      var win2 = range[1] - money;
+	      //字符串模版
+	      var tpl = void 0;
+	      //如果最小盈利和最大盈利都小于0，都亏了，显示会亏最多的钱，否则显示最少赚的钱
+	      var c1 = win1 < 0 && win2 < 0 ? Math.abs(win1) : win1;
+	      //如果最小盈利和最大盈利都小于0，都亏了，显示会亏最少的钱，否则显示赚的的最多的钱。
+	      var c2 = win1 < 0 && win2 < 0 ? Math.abs(win2) : win2;
+
+	      //如果注数等于0，没有任何盈利。就是 您选了 0 注，共 0 元
+	      if (count === 0) {
+	        tpl = '\u60A8\u9009\u4E86 <b class="red">' + count + '</b> \u6CE8\uFF0C\u5171 <b class="red">' + count * 2 + '</b> \u5143';
+	      } else if (range[0] === range[1]) {
+	        //如果最大盈利和最小盈利都相等
+	        tpl = '\u60A8\u9009\u4E86 <b>' + count + '</b> \u6CE8\uFF0C\u5171 <b>' + count * 2 + '</b> \u5143  <em>\u82E5\u4E2D\u5956\uFF0C\u5956\u91D1\uFF1A\n\t\t\t<strong class="red">' + range[0] + '</strong> \u5143\uFF0C\n\t\t\t\u60A8\u5C06' + (win1 >= 0 ? '盈利' : '亏损') + '\n\t\t\t<strong class="' + (win1 >= 0 ? 'red' : 'green') + '">' + Math.abs(win1) + ' </strong> \u5143</em>';
+	      } else {
+	        //如果最大盈利和最小盈利不等
+	        tpl = '\u60A8\u9009\u4E86 <b>' + count + '</b> \u6CE8\uFF0C\u5171 <b>' + count * 2 + '</b> \u5143  <em>\u82E5\u4E2D\u5956\uFF0C\u5956\u91D1\uFF1A\n\t\t\t<strong class="red">' + range[0] + '</strong> \u81F3 <strong class="red">' + range[1] + '</strong> \u5143\uFF0C\n\t\t\t\u60A8\u5C06' + (win1 < 0 && win2 < 0 ? '亏损' : '盈利') + '\n\t\t\t<strong class="' + (win1 >= 0 ? 'red' : 'green') + '">' + c1 + ' </strong>\n\t\t\t\u81F3 <strong class="' + (win2 >= 0 ? 'red' : 'green') + '"> ' + c2 + ' </strong>\n\t\t\t\u5143</em>';
+	      }
+	      //将结果输出到页面上
+	      (0, _jquery2.default)('.sel_info').html(tpl);
+	    }
+
+	    /**
+	     * [getTotal 计算所有金额]
+	     * @return {[type]} [description]
+	     */
+	    // 购物车里的金额计算。
+
+	  }, {
+	    key: 'getTotal',
+	    value: function getTotal() {
+	      var count = 0;
+	      //遍历购物车，取出每个条目的注数累加即可。
+	      (0, _jquery2.default)('.codelist li').each(function (index, item) {
+	        count += (0, _jquery2.default)(item).attr('count') * 1;
+	      });
+	      (0, _jquery2.default)('#count').text(count);
+	      (0, _jquery2.default)('#money').text(count * 2);
+	    }
+
+	    /**
+	     * [getRandom 生成随机数]
+	     * @param  {[type]} num [机选的注数5]
+	     * @return {[type]}     [description]
+	     */
+	    //机选注数的前置。
+
+	  }, {
+	    key: 'getRandom',
+	    value: function getRandom(num) {
+	      var arr = [],
+	          index = void 0;
+	      //定义好随机的空间。number对象就是之前定义的初始化对象。将类似数组的集合转成数组。
+	      var number = Array.from(this.number);
+
+	      //生成num个在1到11范围内的随机数字最后放入数组中。
+	      while (num--) {
+	        index = Number.parseInt(Math.random() * number.length);
+	        arr.push(number[index]);
+	        //将该生成的数字删除掉，就不会有重复的了
+	        number.splice(index, 1);
+	      }
+	      return arr.join(' ');
+	    }
+
+	    /**
+	     * [getRandomCode 添加随机号码]
+	     * @param  {[type]} e [description]
+	     * @return {[type]}   [description]
+	     */
+
+	  }, {
+	    key: 'getRandomCode',
+	    value: function getRandomCode(e) {
+	      //阻止默认事件
+	      e.preventDefault();
+	      //获取机选几注的count的值
+	      var num = e.currentTarget.getAttribute('count');
+	      //获取当前玩法，获取选取多少个号码 任五-五个号码
+	      var play = this.cur_play.match(/\d+/g)[0];
+	      var self = this;
+	      //如果注数为0，则添加无内容进入购物车／清空购物车
+	      if (num === '0') {
+	        (0, _jquery2.default)(self.cart_el).html('');
+	      } else {
+	        //如果注数不为0，则调用addCodeItem方法将数据加入购物车。机选都是单式，都是1
+	        for (var i = 0; i < num; i++) {
+	          self.addCodeItem(self.getRandom(play), self.cur_play, self.play_list.get(self.cur_play).name, 1);
+	        }
+	      }
+	    }
+	  }]);
+
+	  return Base;
 	}();
 
-	exports.default = Interface;
+	exports.default = Base;
 
 /***/ }),
-/* 304 */
+/* 301 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(module) {"use strict";
@@ -18927,6 +19195,314 @@
 		return jQuery;
 	});
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(295)(module)))
+
+/***/ }),
+/* 302 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Timer = function () {
+	  function Timer() {
+	    _classCallCheck(this, Timer);
+	  }
+
+	  _createClass(Timer, [{
+	    key: 'countdown',
+	    value: function countdown(end, update, handle) {
+	      var now = new Date().getTime();
+	      var self = this;
+	      if (now - end > 0) {
+	        handle.call(self);
+	      } else {
+	        var last_time = end - now;
+	        var px_d = 1000 * 60 * 60 * 24;
+	        var px_h = 1000 * 60 * 60;
+	        var px_m = 1000 * 60;
+	        var px_s = 1000;
+	        var d = Math.floor(last_time / px_d);
+	        var h = Math.floor((last_time - d * px_d) / px_h);
+	        var m = Math.floor((last_time - d * px_d - h * px_h) / px_m);
+	        var s = Math.floor((last_time - d * px_d - h * px_h - m * px_m) / px_s);
+	        var r = [];
+	        if (d > 0) {
+	          r.push('<em>' + d + '</em>\u5929');
+	        }
+	        if (r.length || h > 0) {
+	          r.push('<em>' + h + '</em>\u65F6');
+	        }
+	        if (r.length || m > 0) {
+	          r.push('<em>' + m + '</em>\u5206');
+	        }
+	        if (r.length || s > 0) {
+	          r.push('<em>' + s + '</em>\u79D2');
+	        }
+	        self.last_time = r.join('');
+	        update.call(self, r.join(''));
+	        setTimeout(function () {
+	          self.countdown(end, update, handle);
+	        }, 1000);
+	      }
+	    }
+	  }]);
+
+	  return Timer;
+	}();
+
+	exports.default = Timer;
+
+/***/ }),
+/* 303 */
+/***/ (function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Calculate = function () {
+	  function Calculate() {
+	    _classCallCheck(this, Calculate);
+	  }
+
+	  _createClass(Calculate, [{
+	    key: 'computeCount',
+
+	    /**
+	     * [computeCount 计算注数]
+	     * @param  {number} active    [当前选中的号码]
+	     * @param  {string} play_name [当前的玩法标识]
+	     * @return {number}           [注数]
+	     */
+	    value: function computeCount(active, play_name) {
+	      var count = 0;
+	      var exist = this.play_list.has(play_name);
+	      var arr = new Array(active).fill('0');
+	      if (exist && play_name.at(0) === 'r') {
+	        count = Calculate.combine(arr, play_name.split('')[1]).length;
+	      }
+	      return count;
+	    }
+
+	    /**
+	     * [computeBonus 奖金范围预测]
+	     * @param  {number} active    [当前选中的号码]
+	     * @param  {string} play_name [当前的玩法标识]
+	     * @return {array}           [奖金范围]
+	     */
+
+	  }, {
+	    key: 'computeBonus',
+	    value: function computeBonus(active, play_name) {
+	      var play = play_name.split('');
+	      var self = this;
+	      var arr = new Array(play[1] * 1).fill(0);
+	      var min = void 0,
+	          max = void 0;
+	      if (play[0] === 'r') {
+	        var min_active = 5 - (11 - active);
+	        if (min_active > 0) {
+	          if (min_active - play[1] >= 0) {
+	            arr = new Array(min_active).fill(0);
+	            min = Calculate.combine(arr, play[1]).length;
+	          } else {
+	            if (play[1] - 5 > 0 && active - play[1] >= 0) {
+	              arr = new Array(active - 5).fill(0);
+	              min = Calculate.combine(arr, play[1] - 5).length;
+	            } else {
+	              min = active - play[1] > -1 ? 1 : 0;
+	            }
+	          }
+	        } else {
+	          min = active - play[1] > -1 ? 1 : 0;
+	        }
+
+	        var max_active = Math.min(active, 5);
+	        if (play[1] - 5 > 0) {
+	          if (active - play[1] >= 0) {
+	            arr = new Array(active - 5).fill(0);
+	            max = Calculate.combine(arr, play[1] - 5).length;
+	          } else {
+	            max = 0;
+	          }
+	        } else if (play[1] - 5 < 0) {
+	          arr = new Array(Math.min(active, 5)).fill(0);
+	          max = Calculate.combine(arr, play[1]).length;
+	        } else {
+	          max = 1;
+	        }
+	      }
+	      return [min, max].map(function (item) {
+	        return item * self.play_list.get(play_name).bonus;
+	      });
+	    }
+
+	    /**
+	     * [combine 组合运算]
+	     * @param  {array} arr  [参与组合运算的数组]
+	     * @param  {number} size [组合运算的基数]
+	     * @return {number}      [计算注数]
+	     */
+
+	  }], [{
+	    key: 'combine',
+	    value: function combine(arr, size) {
+	      var allResult = [];
+	      (function f(arr, size, result) {
+	        var arrLen = arr.length;
+	        if (size > arrLen) {
+	          return;
+	        }
+	        if (size === arrLen) {
+	          allResult.push([].concat(result, arr));
+	        } else {
+	          for (var i = 0; i < arrLen; i++) {
+	            var newResult = [].concat(result);
+	            newResult.push(arr[i]);
+	            if (size === 1) {
+	              allResult.push(newResult);
+	            } else {
+	              var newArr = [].concat(arr);
+	              newArr.splice(0, i + 1);
+	              f(newArr, size - 1, newResult);
+	            }
+	          }
+	        }
+	      })(arr, size, []);
+	      return allResult;
+	    }
+	  }]);
+
+	  return Calculate;
+	}();
+
+	exports.default = Calculate;
+
+/***/ }),
+/* 304 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _jquery = __webpack_require__(301);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	var Interface = function () {
+	  function Interface() {
+	    _classCallCheck(this, Interface);
+	  }
+
+	  _createClass(Interface, [{
+	    key: 'getOmit',
+
+	    /**
+	     * [getOmit 获取遗漏数据]
+	     * @param  {string} issue [当前期号]
+	     * @return {[type]}       [description]
+	     */
+	    value: function getOmit(issue) {
+	      var self = this;
+	      return new Promise(function (resolve, reject) {
+	        _jquery2.default.ajax({
+	          url: '/get/omit',
+	          data: {
+	            issue: issue
+	          },
+	          dataType: 'json',
+	          success: function success(res) {
+	            self.setOmit(res.data);
+	            resolve.call(self, res);
+	          },
+	          error: function error(err) {
+	            reject.call(err);
+	          }
+	        });
+	      });
+	    }
+	    /**
+	     * [getOpenCode 获取开奖号码]
+	     * @param  {string} issue [期号]
+	     * @return {[type]}       [description]
+	     */
+
+	  }, {
+	    key: 'getOpenCode',
+	    value: function getOpenCode(issue) {
+	      var self = this;
+	      return new Promise(function (resolve, rejet) {
+	        _jquery2.default.ajax({
+	          url: '/get/opencode',
+	          data: {
+	            issue: issue
+	          },
+	          dataType: 'json',
+	          success: function success(res) {
+	            self.setOpenCode(res.data);
+	            resolve.call(self, res);
+	          },
+	          error: function error(err) {
+	            reject.call(err);
+	          }
+	        });
+	      });
+	    }
+
+	    /**
+	     * [getState 获取当前状态]
+	     * @param  {string} issue [当前期号]
+	     * @return {[type]}       [description]
+	     */
+
+	  }, {
+	    key: 'getState',
+	    value: function getState(issue) {
+	      var self = this;
+	      return new Promise(function (resolve, rejet) {
+	        _jquery2.default.ajax({
+	          url: '/get/state',
+	          data: {
+	            issue: issue
+	          },
+	          dataType: 'json',
+	          success: function success(res) {
+	            resolve.call(self, res);
+	          },
+	          error: function error(err) {
+	            reject.call(err);
+	          }
+	        });
+	      });
+	    }
+	  }]);
+
+	  return Interface;
+	}();
+
+	exports.default = Interface;
 
 /***/ })
 /******/ ]);
