@@ -8743,9 +8743,14 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } } //引入模块
 
+	//需要加入变量
+
+
+	//多重继承。深度拷贝的方法。target：要拷贝的目标，source：要拷贝的原对象
 	var copyProperties = function copyProperties(target, source) {
+	  //reflect映射拿到原对象所有属性
 	  var _iteratorNormalCompletion = true;
 	  var _didIteratorError = false;
 	  var _iteratorError = undefined;
@@ -8754,8 +8759,11 @@
 	    for (var _iterator = Reflect.ownKeys(source)[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
 	      var key = _step.value;
 
+	      //选择性拷贝，判断是不是构造函数，原型，是不是name，不是这三个属性才完成拷贝过程
 	      if (key !== 'constructor' && key !== 'prototype' && key !== 'name') {
+	        //拷贝
 	        var desc = Object.getOwnPropertyDescriptor(source, key);
+	        //复制到目标对象
 	        Object.defineProperty(target, key, desc);
 	      }
 	    }
@@ -8775,10 +8783,13 @@
 	  }
 	};
 
+	//实现深度拷贝之后，要有一个多重继承的方法
 	var mix = function mix() {
 	  var Mix = function Mix() {
 	    _classCallCheck(this, Mix);
 	  };
+	  //申明一个空的类，深度拷贝原型
+
 
 	  for (var _len = arguments.length, mixins = Array(_len), _key = 0; _key < _len; _key++) {
 	    mixins[_key] = arguments[_key];
@@ -8792,7 +8803,9 @@
 	    for (var _iterator2 = mixins[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
 	      var mixin = _step2.value;
 
+	      //将mixin拷贝到mix上去
 	      copyProperties(Mix, mixin);
+	      //拷贝原型
 	      copyProperties(Mix.prototype, mixin.prototype);
 	    }
 	  } catch (err) {
@@ -8812,10 +8825,12 @@
 
 	  return Mix;
 	};
+	//定义最终实现彩票的模块。实现多重继承
 
 	var Lottery = function (_mix) {
 	  _inherits(Lottery, _mix);
 
+	  //参数：1.name：区分彩票 2:cname:中文名称 3.issue:当前期号 4.状态
 	  function Lottery() {
 	    var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'syy';
 	    var cname = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '11选5';
@@ -8825,25 +8840,41 @@
 	    _classCallCheck(this, Lottery);
 
 	    var _this = _possibleConstructorReturn(this, (Lottery.__proto__ || Object.getPrototypeOf(Lottery)).call(this));
+	    //继承的时候super放在最前面
+
 
 	    _this.name = name;
 	    _this.cname = cname;
 	    _this.issue = issue;
 	    _this.state = state;
+	    //选择器
 	    _this.el = '';
+	    //遗漏 map对象
 	    _this.omit = new Map();
+	    //开奖号码
 	    _this.open_code = new Set();
+	    //开奖记录
 	    _this.open_code_list = new Set();
+	    //玩法列表
 	    _this.play_list = new Map();
+	    //选号
 	    _this.number = new Set();
+	    //期号的选择器
 	    _this.issue_el = '#curr_issue';
+	    //倒计时的选择器
 	    _this.countdown_el = '#countdown';
+	    //状态的选择器
 	    _this.state_el = '.state_el';
+	    //购物车的选择器
 	    _this.cart_el = '.codelist';
+	    //遗漏的选择器
 	    _this.omit_el = '';
+	    //当前的默认玩法
 	    _this.cur_play = 'r5';
+	    //初始化玩法列表，数字，更新状态，事件初始化
 	    _this.initPlayList();
 	    _this.initNumber();
+	    //这个是lottery里面的方法
 	    _this.updateState();
 	    _this.initEvent();
 	    return _this;
@@ -8858,18 +8889,30 @@
 	  _createClass(Lottery, [{
 	    key: 'updateState',
 	    value: function updateState() {
+	      //保存当前对象
 	      var self = this;
+	      //完成异步操作
 	      this.getState().then(function (res) {
+	        //拿到当前的期号
 	        self.issue = res.issue;
+	        //拿到最新的销售截止时间
 	        self.end_time = res.end_time;
+	        //拿到当前的状态
 	        self.state = res.state;
+	        //更新当前的期号
 	        (0, _jquery2.default)(self.issue_el).text(res.issue);
+	        //倒计时更新
 	        self.countdown(res.end_time, function (time) {
+	          //在网页中更新时间
 	          (0, _jquery2.default)(self.countdown_el).html(time);
 	        }, function () {
+	          //倒计时结束后做什么
 	          setTimeout(function () {
+	            //重新获取最新的销售状态
 	            self.updateState();
+	            //获取当前最新的遗漏
 	            self.getOmit(self.issue).then(function (res) {});
+	            //更新奖号
 	            self.getOpenCode(self.issue).then(function (res) {});
 	          }, 500);
 	        });
@@ -8885,16 +8928,23 @@
 	    key: 'initEvent',
 	    value: function initEvent() {
 	      var self = this;
+	      //玩法切换。通过bind转换当前对象
 	      (0, _jquery2.default)('#plays').on('click', 'li', self.changePlayNav.bind(self));
+	      //号码的选中
 	      (0, _jquery2.default)('.boll-list').on('click', '.btn-boll', self.toggleCodeActive.bind(self));
+	      //添加号码
 	      (0, _jquery2.default)('#confirm_sel_code').on('click', self.addCode.bind(self));
+	      //操作区，大小奇偶清除事件
 	      (0, _jquery2.default)('.dxjo').on('click', 'li', self.assistHandle.bind(self));
+	      //随机号码
 	      (0, _jquery2.default)('.qkmethod').on('click', '.btn-middle', self.getRandomCode.bind(self));
 	    }
 	  }]);
 
 	  return Lottery;
 	}(mix(_base2.default, _calculate2.default, _interface2.default, _timer2.default));
+	//导出
+
 
 	exports.default = Lottery;
 
